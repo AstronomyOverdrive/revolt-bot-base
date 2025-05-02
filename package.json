@@ -1,0 +1,27 @@
+{
+  "name": "@astronomyoverdrive/revolt-bot-base",
+  "version": "1.0.0",
+  "description": "Tool to create basic Revolt bots",
+  "homepage": "https://github.com/AstronomyOverdrive/revolt-bot-base#readme",
+  "keywords": [
+        "revolt",
+        "revoltchat"
+    ],
+  "bugs": {
+    "url": "https://github.com/AstronomyOverdrive/revolt-bot-base/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AstronomyOverdrive/revolt-bot-base.git"
+  },
+  "license": "GPL-3.0",
+  "author": "William Pettersson",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "ws": "^8.18.1"
+  }
+}
