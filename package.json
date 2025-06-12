@@ -1,12 +1,12 @@
 {
   "name": "@astronomyoverdrive/revolt-bot-base",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Tool to create basic Revolt bots",
   "homepage": "https://github.com/AstronomyOverdrive/revolt-bot-base#readme",
   "keywords": [
-        "revolt",
-        "revoltchat"
-    ],
+    "revolt",
+    "revoltchat"
+  ],
   "bugs": {
     "url": "https://github.com/AstronomyOverdrive/revolt-bot-base/issues"
   },
