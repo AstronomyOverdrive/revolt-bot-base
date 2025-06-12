@@ -52,7 +52,8 @@
             .b {
                 color:orchid;
             }
-            .t {
+            .t,
+            .t > span {
                 color:lightgreen;
             }
             .c {
@@ -64,6 +65,9 @@
             .d,
             .d > span {
                 color:gray;
+            }
+            .w {
+                color:white;
             }
             :nth-child(even of .g>span) {
                 color:lightskyblue;
@@ -332,7 +336,7 @@
 &nbsp;                  action: "Custom",<br>
 &nbsp;                  allowedRoles: [],<br>
 &nbsp;                  allowedChannels: [],<br>
-&nbsp;                  contents: `JavaScript code`<br>
+&nbsp;                  contents: `JavaScript-code`<br>
                     });
                 </div><br>
                 <div class="g">
@@ -346,25 +350,29 @@
                     <br>
                     <span><strong>allowedChannels</strong> = Where can this command be used? Array with Channel IDs or empty to allow it everywhere</span>
                     <br>
-                    <span><strong>contents</strong> = Code to run when called</span>
+                    <span><strong>contents</strong> = Code to run when called. String
                     <br>
-                    <span>-Available variables:</span>
+                    -Available variables (all are strings):
                     <br>
-                    <span>&bull; <strong>UserId</strong> - Id of the user who called the command</span>
+                    &bull; <strong>UserId</strong> - Id of the user who called the command
                     <br>
-                    <span>&bull; <strong>UserChannel</strong> - Id of the channel the command was called from</span>
+                    &bull; <strong>UserChannel</strong> - Id of the channel the command was called from
                     <br>
-                    <span>&bull; <strong>UserText</strong> - Everything after "!command "</span>
+                    &bull; <strong>UserText</strong> - Everything after "!command "
                     <br>
-                    <span>-Available commands:</span>
+                    -Available functions (all items in the arrays are strings):
                     <br>
-                    <span>&bull; <strong>makeRequest("Send", [channelId, messageText]);</strong></span>
+                    &bull; <strong>makeRequest("Send", [channelId, messageText]);</strong>
                     <br>
-                    <span>&bull; <strong>makeRequest("Kick", [serverId, userId, reasonMessage]);</strong></span>
+                    &bull; <strong>makeRequest("Kick", [serverId, userId, reasonMessage]);</strong>
                     <br>
-                    <span>&bull; <strong>makeRequest("Ban", [serverId, userId, reasonMessage]);</strong></span>
+                    &bull; <strong>makeRequest("Ban", [serverId, userId, reasonMessage]);</strong>
                     <br>
-                    <span>&bull; <strong>makeRequest("AddRole", [serverId, userId, roleId]);</strong></span>
+                    &bull; <strong>makeRequest("AddRole", [serverId, userId, roleId]);</strong>
+                    <br>
+                    -Tip:
+                    <br>
+                    &bull; <strong>Use prefixes on your variable/function names to avoid overwriting the ones from the bot, e.g. function my_Function()</strong></span>
                 </div>
             </section>
 
@@ -480,10 +488,10 @@
 &nbsp;                  allowedRoles: [],<br>
 &nbsp;                  allowedChannels: [],<br>
 &nbsp;                  contents: `<br>
-&nbsp;&nbsp;                  const bot_SendTo = UserChannel;<br>
-&nbsp;&nbsp;                  const bot_Year = new Date().getFullYear();<br>
-&nbsp;&nbsp;                  const bot_SendText = '"'+UserText+'" - &lt;@'+UserId+'&gt;, '+bot_Year;<br>
-&nbsp;&nbsp;                  makeRequest("Send", [bot_SendTo, bot_SendText]);<br>
+&nbsp;&nbsp;                  const my_SendTo = UserChannel;<br>
+&nbsp;&nbsp;                  const my_Year = new Date().getFullYear();<br>
+&nbsp;&nbsp;                  const my_SendText = '"'+UserText+'" - &lt;@'+UserId+'&gt;, '+my_Year;<br>
+&nbsp;&nbsp;                  makeRequest("Send", [my_SendTo, my_SendText]);<br>
 &nbsp;                  `<br>
                     });<br><br>
 
@@ -495,10 +503,10 @@
 &nbsp;                  allowedRoles: [],<br>
 &nbsp;                  allowedChannels: [],<br>
 &nbsp;                  contents: `<br>
-&nbsp;&nbsp;                  const bot_SendTo = UserChannel;<br>
-&nbsp;&nbsp;                  const bot_Numbers = UserText.split(" ");<br>
-&nbsp;&nbsp;                  const bot_SendText = Number(bot_Numbers[0]) + Number(bot_Numbers[1]);<br>
-&nbsp;&nbsp;                  makeRequest("Send", [bot_SendTo, String(bot_SendText)]);<br>
+&nbsp;&nbsp;                  const my_SendTo = UserChannel;<br>
+&nbsp;&nbsp;                  const my_Numbers = UserText.split(" ");<br>
+&nbsp;&nbsp;                  const my_SendText = Number(my_Numbers[0]) + Number(my_Numbers[1]);<br>
+&nbsp;&nbsp;                  makeRequest("Send", [my_SendTo, String(my_SendText)]);<br>
 &nbsp;                  `<br>
                     });<br><br>
 
@@ -512,42 +520,44 @@
             const CodeBlocks = document.querySelectorAll(".e");
             CodeBlocks.forEach(CodeBlock => { // Replace
                 let contents = CodeBlock.innerHTML
-                .replaceAll('=', '<span class="s">=</span>')
-                .replaceAll('+', '<span class="s">+</span>')
-                .replaceAll('const', '<span class="c">const</span>')
-                .replaceAll('ConfigureBot', '<span class="c">ConfigureBot</span>')
-                .replaceAll('RegisterCommand', '<span class="c">RegisterCommand</span>')
-                .replaceAll('startBot', '<span class="c">startBot</span>')
-                .replaceAll('require', '<span class="b">require</span>')
-                .replaceAll('bot.', '<span class="b">bot</span>.')
-                .replaceAll('new', '<span class="b">new</span>')
-                .replaceAll('$', '<span class="t">$</span>')
-                .replaceAll('1 ', '<span class="n">1</span> ')
-                .replaceAll('1,', '<span class="n">1</span>,')
-                .replaceAll('1<br>', '<span class="n">1</span><br>')
-                .replaceAll('2', '<span class="n">2</span>')
-                .replaceAll('3', '<span class="n">3</span>')
-                .replaceAll('("', '(<span class="t">"')
+                // Keywords
+                .replaceAll("const", "<span class='c'>const</span>")
+                .replaceAll("true", "<span class='c'>true</span>")
+                .replaceAll("false", "<span class='c'>false</span>")
+                .replaceAll("RegisterCommand", "<span class='c'>RegisterCommand</span>")
+                .replaceAll("ConfigureBot", "<span class='c'>ConfigureBot</span>")
+                .replaceAll("startBot", "<span class='c'>startBot</span>")
+                .replaceAll("require", "<span class='b'>require</span>")
+                .replaceAll("bot.", "<span class='b'>bot</span>.")
+                // Command registration
+                .replaceAll("({", "({<span class='a'>")
+                .replaceAll("});", "</span>});")
+                // Strings
+                .replaceAll(": `", ": <span class='t'>`")
+                .replaceAll("  `", "  `</span>")
                 .replaceAll(': "', ': <span class="t">"')
+                .replaceAll(', "', ', <span class="t">"')
                 .replaceAll('["', '[<span class="t">"')
+                .replaceAll('("', '(<span class="t">"')
                 .replaceAll('",', '"</span>,')
+                .replaceAll('"<br>', '"</span><br>')
                 .replaceAll('"]', '"</span>]')
                 .replaceAll('")', '"</span>)')
-                .replaceAll('"<br>', '"</span><br>')
-                .replaceAll('&nbsp;', '&nbsp;&nbsp;&nbsp;')
-                .replaceAll('true', '<span class="a">true</span>')
-                .replaceAll('false', '<span class="a">false</span>')
-                .replaceAll(':', '<span class="s">:</span>')
-                .replaceAll(',', '<span class="s">,</span>')
-                .replaceAll('[', '<span class="s">[</span>')
-                .replaceAll(']', '<span class="s">]</span>')
-                .replaceAll('(', '<span class="b">(</span>')
-                .replaceAll('{', '<span class="b">{</span>')
-                .replaceAll(')', '<span class="b">)</span>')
-                .replaceAll('}', '<span class="b">}</span>')
-                .replaceAll('`', '<span class="s">`</span>')
-                .replaceAll('/*', '<span class="d">/*')
-                .replaceAll('*/', '*/</span>');
+                // Numbers
+                .replaceAll("1", "<span class='n'>1</span>")
+                .replaceAll("2", "<span class='n'>2</span>")
+                .replaceAll("3", "<span class='n'>3</span>")
+                // Symbols
+                .replaceAll("$", "<span class='t'>$</span>")
+                .replaceAll(":", "<span class='w'>:</span>")
+                .replaceAll(",", "<span class='w'>,</span>")
+                .replaceAll("[", "<span class='w'>[</span>")
+                .replaceAll("]", "<span class='w'>]</span>")
+                // Comments
+                .replaceAll("/*", "<span class='d'>/*")
+                .replaceAll("*/", "*/</span>")
+                // Indenting
+                .replaceAll("&nbsp;", "&nbsp;&nbsp;&nbsp;");
                 CodeBlock.innerHTML = contents;
             });
         </script>

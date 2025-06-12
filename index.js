@@ -156,12 +156,16 @@ function handleCommand(message, cmdObject) {
         }
         switch (cmdObject.action) {
             case "Custom":
-                eval(`
-                    const UserChannel = message.channel;
-                    const UserText = message.content.replace(cmdObject.command+" ", "");
-                    const UserId = message.author;
-                    ${cmdObject.contents}
-                `);
+                try {
+                    eval(`
+                        const UserChannel = message.channel;
+                        const UserText = message.content.replace(cmdObject.command+" ", "");
+                        const UserId = message.author;
+                        ${cmdObject.contents}
+                    `);
+                } catch (error) {
+                    console.error(`Command "${cmdObject.command}" failed!\n${error}`);
+                }
                 break;
             case "Send":
                 let msgTarget = message.channel;

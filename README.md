@@ -19,6 +19,7 @@ bot.ConfigureBot({
     serverId: "YOUR_SERVER_ID", // Right-click server -> Copy server ID
     APILogs: false, // Don't show events/responses in terminal
     chatLogs: "", // Don't keep a log of users messages
+    modLogs: "", // Don't keep kick/ban logs
     prefix: "!", // Use "!" as command prefix
     removeCaller: true, // Remove the message that triggered the command
     badWords: [/\bemacs\b/, "vscode"], // Remove messages with these words
@@ -101,6 +102,36 @@ bot.RegisterCommand({
     allowedRoles: [],
     allowedChannels: ["WELCOME_CHANNEL_ID"],
     contents: "MEMBER_ROLE_ID"
+});
+
+// !quote [text to quote]
+bot.RegisterCommand({
+    usePrefix: true,
+    command: "quote",
+    action: "Custom",
+    allowedRoles: [],
+    allowedChannels: [],
+    contents: `
+       const my_SendTo = UserChannel;
+       const my_Year = new Date().getFullYear();
+       const my_SendText = '"'+UserText+'" - <@'+UserId+'>, '+my_Year;
+       makeRequest("Send", [my_SendTo, my_SendText]);
+    `
+});
+
+// !add 10 5
+bot.RegisterCommand({
+    usePrefix: true,
+    command: "add",
+    action: "Custom",
+    allowedRoles: [],
+    allowedChannels: [],
+    contents: `
+       const my_SendTo = UserChannel;
+       const my_Numbers = UserText.split(" ");
+       const my_SendText = Number(my_Numbers[0]) + Number(my_Numbers[1]);
+       makeRequest("Send", [my_SendTo, String(my_SendText)]);
+    `
 });
 
 bot.startBot();
