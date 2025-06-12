@@ -155,6 +155,14 @@ function handleCommand(message, cmdObject) {
             makeRequest("Remove", [message.channel, message._id]);
         }
         switch (cmdObject.action) {
+            case "Custom":
+                eval(`
+                    const UserChannel = message.channel;
+                    const UserText = message.content.replace(cmdObject.command+" ", "");
+                    const UserId = message.author;
+                    ${cmdObject.contents}
+                `);
+                break;
             case "Send":
                 let msgTarget = message.channel;
                 if (cmdObject.target !== "") {
@@ -182,8 +190,11 @@ function handleCommand(message, cmdObject) {
                     const userRegex = new RegExp(`${cmdObject.command} <@(.*)>`);
                     const reasonRegex = new RegExp(`${cmdObject.command} <@.*> (.*)`);
                     const userToKick = message.content.match(userRegex)[1];
-                    const kickReason = message.content.match(reasonRegex)[1] + ` | By: ${message.user.display_name} (${message.user.username}#${message.user.discriminator} / ${message.author})`;
+                    const kickReason = message.content.match(reasonRegex)[1] + ` | By: ${message.user.display_name} (${message.user.username}#${message.user.discriminator} / <@${message.author}>)`;
                     makeRequest("Kick", [message.member._id.server, userToKick, kickReason]);
+                    if (botConfig.modLogs) {
+                        makeRequest("Send", [botConfig.modLogs, `<@${userToKick}> Kicked\nReason: ${kickReason}`]);
+                    }
                 } catch {
                     makeRequest("Send", [message.channel, `Invalid syntax, <@${message.author}>! Use "${cmdObject.command} <@userid> reason"`]);
                 }
@@ -193,8 +204,11 @@ function handleCommand(message, cmdObject) {
                     const userRegex = new RegExp(`${cmdObject.command} <@(.*)>`);
                     const reasonRegex = new RegExp(`${cmdObject.command} <@.*> (.*)`);
                     const userToBan = message.content.match(userRegex)[1];
-                    const banReason = message.content.match(reasonRegex)[1] + ` | By: ${message.user.display_name} (${message.user.username}#${message.user.discriminator} / ${message.author})`;
+                    const banReason = message.content.match(reasonRegex)[1] + ` | By: ${message.user.display_name} (${message.user.username}#${message.user.discriminator} / <@${message.author}>)`;
                     makeRequest("Ban", [message.member._id.server, userToBan, banReason]);
+                    if (botConfig.modLogs) {
+                        makeRequest("Send", [botConfig.modLogs, `<@${userToBan}> Banned\nReason: ${banReason}`]);
+                    }
                 } catch {
                     makeRequest("Send", [message.channel, `Invalid syntax, <@${message.author}>! Use "${cmdObject.command} <@userid> reason"`]);
                 }
