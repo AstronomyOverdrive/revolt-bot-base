@@ -19,12 +19,15 @@
 import WebSocket from "ws";
 
 let commands = [];
+let recurring = [];
+let lastRecurring;
 let botConfig = {
     botToken: "",
     botUserId: "",
     serverId: "",
     APILogs: false,
     chatLogs: "",
+    modLogs: "",
     prefix: "!",
     removeCaller: false,
     badWords: [],
@@ -49,7 +52,7 @@ console.log(
 |   /   /\\   /__  |
 |---\\  /__\\     \\ |--
 |___/ /    \\ ___/ |___
-v25.05a
+v25.06b
 William Pettersson
 Licensed under GPL-3.0
 Read the docs at: https://astronomyoverdrive.github.io/revolt-bot-base/
@@ -196,7 +199,7 @@ function handleCommand(message, cmdObject) {
                     const userToKick = message.content.match(userRegex)[1];
                     const kickReason = message.content.match(reasonRegex)[1] + ` | By: ${message.user.display_name} (${message.user.username}#${message.user.discriminator} / <@${message.author}>)`;
                     makeRequest("Kick", [message.member._id.server, userToKick, kickReason]);
-                    if (botConfig.modLogs) {
+                    if (botConfig.modLogs !== "") {
                         makeRequest("Send", [botConfig.modLogs, `<@${userToKick}> Kicked\nReason: ${kickReason}`]);
                     }
                 } catch {
@@ -210,7 +213,7 @@ function handleCommand(message, cmdObject) {
                     const userToBan = message.content.match(userRegex)[1];
                     const banReason = message.content.match(reasonRegex)[1] + ` | By: ${message.user.display_name} (${message.user.username}#${message.user.discriminator} / <@${message.author}>)`;
                     makeRequest("Ban", [message.member._id.server, userToBan, banReason]);
-                    if (botConfig.modLogs) {
+                    if (botConfig.modLogs !== "") {
                         makeRequest("Send", [botConfig.modLogs, `<@${userToBan}> Banned\nReason: ${banReason}`]);
                     }
                 } catch {
@@ -268,6 +271,18 @@ function handlePunishment(offence, level, server, channel, message, author, cont
 
 function ping(server) {
     server.send(`{"type":"Ping","data":0}`);
+
+    // Also check if it's time to send a recurring message
+    const DateNow = new Date();
+    const DayNow = DateNow.getDay();
+    const HourNow = DateNow.getHours();
+    const MinuteNow = DateNow.getMinutes();
+    recurring.forEach(item => {
+        if (item.Day === DayNow && item.Hour === HourNow && item.Minute === MinuteNow && lastRecurring !== MinuteNow) {
+            makeRequest("Send", [item.Channel, item.Message]);
+        }
+    });
+    lastRecurring = MinuteNow;
 }
 
 // Current limited URLs + when the limits expires
@@ -362,4 +377,20 @@ function RegisterCommand(newCmd) {
     });
 }
 
-export {ConfigureBot, RegisterCommand, startBot}
+function RegisterRecurring(newRec) {
+    newRec.Day.forEach(day => {
+        newRec.Hour.forEach(hour => {
+            newRec.Minute.forEach(minute => {
+                recurring.push({
+                    Day: day,
+                    Hour: hour,
+                    Minute: minute,
+                    Channel: newRec.Channel,
+                    Message: newRec.Message
+                });
+            });
+        });
+    });
+}
+
+export {ConfigureBot, RegisterCommand, RegisterRecurring, startBot}

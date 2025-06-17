@@ -134,5 +134,23 @@ bot.RegisterCommand({
     `
 });
 
+// Friday message
+bot.RegisterRecurring({
+    Day: [5],
+    Hour: [0],
+    Minute: [0],
+    Channel: "GENERAL_CHANNEL_ID",
+    Message: "It's finally friday!"
+});
+
+// Twelve reminder
+bot.RegisterRecurring({
+    Day: [0, 1, 2, 3, 4, 5, 6],
+    Hour: [0, 12],
+    Minute: [0],
+    Channel: "GENERAL_CHANNEL_ID",
+    Message: "The clock is now twelve!"
+});
+
 bot.startBot();
 ```

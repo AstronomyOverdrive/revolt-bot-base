@@ -91,6 +91,7 @@
                     <li><a href="#kick">Register "Kick" action command</a></li>
                     <li><a href="#ban">Register "Ban" action command</a></li>
                     <li><a href="#custom">Register "Custom" action command</a></li>
+                    <li><a href="#recurring">Register recurring message</a></li>
                     <li><a href="#start">Start bot</a></li>
                     <li><a href="#example">Example bot</a></li>
                 </ul>
@@ -376,6 +377,30 @@
                 </div>
             </section>
 
+            <section id="recurring">
+                <h2>Register recurring message</h2>
+                <div class="e">
+                    RegisterRecurring({<br>
+&nbsp;                  Day: [],<br>
+&nbsp;                  Hour: [],<br>
+&nbsp;                  Minute: [],<br>
+&nbsp;                  Channel: "channelid",<br>
+&nbsp;                  Message: "message"<br>
+                    });
+                </div><br>
+                <div class="g">
+                    <span><strong>Day</strong> = What day(s) to send this message? Array with integers, 0-6 with 0 = Sunday and 6 = Saturday.</span>
+                    <br>
+                    <span><strong>Hour</strong> = What hour(s) to send this message? Array with integers, 0-23.</span>
+                    <br>
+                    <span><strong>Minute</strong> = What minute(s) to send this message? Array with integers, 0-59.</span>
+                    <br>
+                    <span><strong>Channel</strong> = Where should the message be sent? String with Channel ID.</span>
+                    <br>
+                    <span><strong>Message</strong> = What text to send? String with message.</span>
+                </div>
+            </section>
+
             <section id="start">
                 <h2>Start bot</h2>
                 <strong><em>Must be after commands</em></strong><br>
@@ -510,6 +535,24 @@
 &nbsp;                  `<br>
                     });<br><br>
 
+                    /* Friday message */<br>
+                    bot.RegisterRecurring({<br>
+&nbsp;                  Day: [5],<br>
+&nbsp;                  Hour: [0],<br>
+&nbsp;                  Minute: [0],<br>
+&nbsp;                  Channel: "GENERAL_CHANNEL_ID",<br>
+&nbsp;                  Message: "It's finally friday!"<br>
+                    });<br><br>
+
+                    /* Twelve reminder */<br>
+                    bot.RegisterRecurring({<br>
+&nbsp;                  Day: [0, 1, 2, 3, 4, 5, 6],<br>
+&nbsp;                  Hour: [0, 12],<br>
+&nbsp;                  Minute: [0],<br>
+&nbsp;                  Channel: "GENERAL_CHANNEL_ID",<br>
+&nbsp;                  Message: "The clock is now twelve!"<br>
+                    });<br><br>
+
                     bot.startBot();
                 </div>
             </section>
@@ -525,6 +568,7 @@
                 .replaceAll("true", "<span class='c'>true</span>")
                 .replaceAll("false", "<span class='c'>false</span>")
                 .replaceAll("RegisterCommand", "<span class='c'>RegisterCommand</span>")
+                .replaceAll("RegisterRecurring", "<span class='c'>RegisterRecurring</span>")
                 .replaceAll("ConfigureBot", "<span class='c'>ConfigureBot</span>")
                 .replaceAll("startBot", "<span class='c'>startBot</span>")
                 .replaceAll("require", "<span class='b'>require</span>")
@@ -544,9 +588,13 @@
                 .replaceAll('"]', '"</span>]')
                 .replaceAll('")', '"</span>)')
                 // Numbers
+                .replaceAll("0", "<span class='n'>0</span>")
                 .replaceAll("1", "<span class='n'>1</span>")
                 .replaceAll("2", "<span class='n'>2</span>")
                 .replaceAll("3", "<span class='n'>3</span>")
+                .replaceAll("4", "<span class='n'>4</span>")
+                .replaceAll("5", "<span class='n'>5</span>")
+                .replaceAll("6", "<span class='n'>6</span>")
                 // Symbols
                 .replaceAll("$", "<span class='t'>$</span>")
                 .replaceAll(":", "<span class='w'>:</span>")
